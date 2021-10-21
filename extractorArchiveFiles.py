@@ -1,4 +1,4 @@
-t#! /usr/bin/env python3
+#! /usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
 """For recusively extracting nested tar archives.
@@ -218,9 +218,3 @@ if __name__ == '__main__':
             print ('Not a valid path: %s' %argument)
             error_count += 1
     if error_count !=0: print ('%d error(s) occured.' %error_count)
-"""
-Created on Thu Oct 21 13:47:30 2021
-
-@author: hamidg
-"""
-
