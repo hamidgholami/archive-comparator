@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Archive files for test
-.tar.gz
-.zip
-.gz
-.tar
+*.tar.gz
+*.zip
+*.gz
+*.tar
