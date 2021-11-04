@@ -1,6 +1,9 @@
-#! /usr/bin/env python3
+#! /usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+###########################################################################################################################################
+# THIS SCRIPT IS FORKED FROM A CODE IN A GIST PAGE AS FOLLOWING URL: https://gist.github.com/jobinlawrance/e76f6a661d89680d4e29d2d6eaf8fa2d
+###########################################################################################################################################
 """For recusively extracting nested tar archives.
    Author: Hamid Gholami <hidgholami@gmail.com>
    github: https://github.com/hamidgholami/archive-comparator.git
@@ -12,13 +15,14 @@ import sys
 import re
 import tarfile
 import gzip
+import zipfile
 from argparse import ArgumentParser
 
 major_version = 1
 minor_version = 1
 error_count = 0
 
-file_extensions = ('tar', 'tgz', 'tbz', 'tb2', 'tar.gz', 'tar.bz2')
+file_extensions = ('tar', 'tgz', 'tbz', 'tb2', 'tar.gz', 'tar.bz2', 'zip')
 # Edit this according to the archive types you want to extract. Keep in
 # mind that these should be extractable by the tarfile module.
 
@@ -40,7 +44,7 @@ def FileExtension(file_name):
     return value -->  'tar'
     
     """
-    match = re.compile(r"^.*?[.](?P<ext>tar[.]gz|tar[.]bz2|\w+)$",
+    match = re.compile(r"^.*?[.](?P<ext>tar[.]gz|tar[.]bz2|[.]zip|\w+)$",
       re.VERBOSE|re.IGNORECASE).match(file_name)
 
     if match:           # if match != None:
@@ -149,6 +153,31 @@ def ExtractGz(tarfile_fullpath, delete_tar_file=True):
         print ('(Error)\n(%s)' %str(sys.exc_info()[1]).capitalize())
         global error_count
         error_count += 1
+## this part should be change
+def ExtractZip(tarfile_fullpath, delete_tar_file=True):
+    
+    try:
+        print ("Extracting '%s'" %tarfile_fullpath, end=" ")
+        # gz = gzip.open(tarfile_fullpath)
+        zp = zipfile.ZipFile(tarfile_fullpath)
+        extract_folder_fullpath = AppropriateFolderName(tarfile_fullpath[:\
+          -1*len(FileExtension(tarfile_fullpath))-1])
+        extract_folder_name = os.path.basename(extract_folder_fullpath)
+        print ("to '%s'..." %extract_folder_name, end=" ")
+        output = open(extract_folder_fullpath,"wb")
+        output.write( gz.read() )
+        print ("Done!")
+        gz.close()
+        output.close()
+        if delete_tar_file: os.remove(tarfile_fullpath)
+        return extract_folder_name
+
+    except Exception:
+        # Exceptions can occur while opening a damaged tar file.
+        print ('(Error)\n(%s)' %str(sys.exc_info()[1]).capitalize())
+        global error_count
+        error_count += 1
+#########################
 
 def WalkTreeAndExtract(parent_dir):
     """Recursively descend the directory tree rooted at parent_dir
