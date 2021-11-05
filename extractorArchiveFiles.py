@@ -170,11 +170,9 @@ def ExtractZip(tarfile_fullpath, delete_tar_file=True):
           -1*len(FileExtension(tarfile_fullpath))-1])
         extract_folder_name = os.path.basename(extract_folder_fullpath)
         print ("to '%s'..." %extract_folder_name, end=" ")
-        output = open(extract_folder_fullpath,"wb")
-        output.write( gz.read() )
-        print ("Done!")
-        
-        
+        with ZipFile(tarfile_fullpath,'r') as zipObj:
+            zipObj.extractall(path=extract_folder_name)
+        print ("Done!")      
         if delete_tar_file: os.remove(tarfile_fullpath)
         return extract_folder_name
 
