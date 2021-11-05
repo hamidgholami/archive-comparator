@@ -154,6 +154,13 @@ def ExtractGz(tarfile_fullpath, delete_tar_file=True):
         global error_count
         error_count += 1
 ## this part should be change
+"""
+def extract(filename):
+    dirname = os.path.splitext(filename)[0]
+    os.mkdir(dirname)
+    with ZipFile(filename,'r') as zipObj:
+        zipObj.extractall(path=dirname)
+"""
 def ExtractZip(tarfile_fullpath, delete_tar_file=True):
     
     try:
@@ -216,6 +223,10 @@ def WalkTreeAndExtract(parent_dir):
                     # Append the newly extracted folder to dir_contents
                     # so that it can be later searched for more tar files
                     # to extract.
+            elif FileExtension(content_fullpath) == 'zip':
+                extract_folder_name = ExtractZip(content_fullpath)
+                if extract_folder_name:
+                    dir_contents.append(extract_folder_name)
         else:
             # Unknown file type.
             print ('Skipping %s. <Neither file nor folder>' % content_fullpath)
