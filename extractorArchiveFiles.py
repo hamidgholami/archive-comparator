@@ -15,7 +15,7 @@ import sys
 import re
 import tarfile
 import gzip
-import zipfile
+from zipfile import ZipFile
 from argparse import ArgumentParser
 
 major_version = 1
