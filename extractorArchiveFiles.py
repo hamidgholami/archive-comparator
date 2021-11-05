@@ -165,8 +165,7 @@ def ExtractZip(tarfile_fullpath, delete_tar_file=True):
     
     try:
         print ("Extracting '%s'" %tarfile_fullpath, end=" ")
-        # gz = gzip.open(tarfile_fullpath)
-        zp = zipfile.ZipFile(tarfile_fullpath)
+        
         extract_folder_fullpath = AppropriateFolderName(tarfile_fullpath[:\
           -1*len(FileExtension(tarfile_fullpath))-1])
         extract_folder_name = os.path.basename(extract_folder_fullpath)
@@ -174,8 +173,8 @@ def ExtractZip(tarfile_fullpath, delete_tar_file=True):
         output = open(extract_folder_fullpath,"wb")
         output.write( gz.read() )
         print ("Done!")
-        gz.close()
-        output.close()
+        
+        
         if delete_tar_file: os.remove(tarfile_fullpath)
         return extract_folder_name
 
